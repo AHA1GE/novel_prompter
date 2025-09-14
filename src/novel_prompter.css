@@ -163,6 +163,13 @@ button.copy {
     gap: 12px;
 }
 
+.help-text {
+    grid-column: 1 / -1;
+    margin: -4px 0 8px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
 .char-item {
     border: 1px solid var(--border);
     border-radius: 10px;

@@ -179,10 +179,12 @@ function newCharItem() {
 			</div>
 			<div class="field">
 				<label>名字</label>
-				<select data-k="name">
-					<option value="AI 取名">AI 取名</option>
-					<option value="不直接称名">不直接称名</option>
-				</select>
+                <select data-k="name">
+                    <option value="AI 取名">AI 取名</option>
+                    <option value="不直接称名">不直接称名</option>
+                    <option value="自定义">自定义</option>
+                </select>
+                <input data-k="nameCustom" class="hidden" placeholder="输入角色名字" />
 			</div>
 			<div class="field">
 				<label>外在人格（多选）</label>
@@ -248,7 +250,14 @@ function readCharItem(item) {
 
     return {
         gender: get("gender").value,
-        name: get("name").value,
+        name: (() => {
+            const mode = get("name").value;
+            if (mode === "自定义") {
+                const v = (get("nameCustom")?.value || "").trim();
+                return v || "AI 取名";
+            }
+            return mode;
+        })(),
         outer,
         inner,
         backstory,
@@ -273,7 +282,11 @@ function tplWorld({ fantasy, time, scale, ideology }) {
 
 function tplCharacter(c) {
     const avoidGender = c.gender === "不提及" ? "避免使用性别指代和代词" : `性别：${c.gender}`;
-    const nameRule = c.name === "不直接称名" ? "不要直接称呼其本名" : "允许由 AI 取名";
+    const nameRule = (c.name === "不直接称名")
+        ? "不要直接称呼其本名"
+        : (c.name === "AI 取名")
+            ? "允许由 AI 取名"
+            : `固定名字：${c.name}`;
     return `请生成角色详情看板，使用 Markdown 纯文本：
 
 - 角色定位：${c.role}
@@ -382,6 +395,8 @@ function main() {
         injectTraitOptions(node);
         // 填充背景预设
         injectBackstoryOptions(node);
+        // 初始化名字自定义输入显隐
+        updateNameCustomVisibility(node);
     }
     byId("char-add").addEventListener("click", () => addChar());
     // 初始至少一行
@@ -412,9 +427,33 @@ function main() {
                     dstEl.value = srcEl.value;
                 }
             });
+            // 根据选择更新自定义名字输入显隐
+            updateNameCustomVisibility(clone);
             item.after(clone);
         }
     });
+
+    // 名字选择变化时，切换自定义输入显隐（事件委托）
+    list.addEventListener("change", (e) => {
+        const sel = e.target.closest('select[data-k="name"]');
+        if (!sel) return;
+        const wrap = sel.closest('.char-item');
+        if (!wrap) return;
+        updateNameCustomVisibility(wrap);
+    });
+
+    // 工具：根据选择显示/隐藏自定义名字输入
+    function updateNameCustomVisibility(wrap) {
+        const sel = wrap.querySelector('select[data-k="name"]');
+        const input = wrap.querySelector('input[data-k="nameCustom"]');
+        if (!sel || !input) return;
+        const custom = sel.value === "自定义";
+        if (custom) {
+            input.classList.remove("hidden");
+        } else {
+            input.classList.add("hidden");
+        }
+    }
 
     // 角色生成
     byId("char-generate").addEventListener("click", () => {

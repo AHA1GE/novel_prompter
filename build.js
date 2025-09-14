@@ -36,11 +36,11 @@ async function main() {
     const linkRegex = new RegExp('<link\\s+[^>]*href=["\\\'](?:\\./?|\\.\\./)?novel_prompter\\.css["\\\'][^>]*\\/?\\s*>', 'i');
     const styleTag = `\n  <style>\n${cssContent}\n  </style>\n`;
     if (linkRegex.test(out)) {
-        out = out.replace(linkRegex, styleTag.trim());
+        out = out.replace(linkRegex, () => styleTag.trim());
     } else {
         // Fallback: inject before </head> or at top
         if (/(<\/head>)/i.test(out)) {
-            out = out.replace(/<\/head>/i, `${styleTag}</head>`);
+            out = out.replace(/<\/head>/i, (m) => `${styleTag}${m}`);
         } else {
             out = styleTag + out;
         }
@@ -50,11 +50,11 @@ async function main() {
     const scriptSrcRegex = new RegExp('<script\\s+[^>]*src=["\\\'](?:\\./?|\\.\\./)?novel_prompter\\.js["\\\'][^>]*>\\s*<\\/script>', 'i');
     const inlineScriptTag = `\n  <script>\n${jsContent}\n  </script>\n`;
     if (scriptSrcRegex.test(out)) {
-        out = out.replace(scriptSrcRegex, inlineScriptTag.trim());
+        out = out.replace(scriptSrcRegex, () => inlineScriptTag.trim());
     } else {
         // Fallback: inject before </body> or at end
         if (/(<\/body>)/i.test(out)) {
-            out = out.replace(/<\/body>/i, `${inlineScriptTag}</body>`);
+            out = out.replace(/<\/body>/i, (m) => `${inlineScriptTag}${m}`);
         } else {
             out = out + inlineScriptTag;
         }

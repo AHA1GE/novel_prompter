@@ -5,9 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>小说创作提示词生成器</title>
-    <link rel="stylesheet" href="./index.css" />
-
-  <style>
+    <style>
 :root {
     --bg: #0f172a;
     --panel: #111827;
@@ -387,9 +385,7 @@ button.copy {
         <span>纯前端 · 打开本文件即可使用</span>
     </footer>
 
-    <script src="./index.js"></script>
-
-  <script>
+    <script>
 // 数据与模板 —— 简洁结构，少分支
 const GENRES = [
     "奇幻", "科幻", "悬疑", "惊悚", "浪漫", "历史", "都市", "冒险", "武侠", "推理",
@@ -519,7 +515,7 @@ const PRESET_BACKSTORY_GROUPS = [
 
 // 工具函数
 const $ = (sel) => document.querySelector(sel);
-const $ = (sel) => Array.from(document.querySelectorAll(sel));
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 const byId = (id) => document.getElementById(id);
 
 function setText(id, text) { byId(id).value = text.trim() + "\n"; }
@@ -534,12 +530,12 @@ async function copyFrom(targetId) {
 
 // 选项卡行为
 function setupTabs() {
-    $(".tab").forEach((btn) => {
+    $$(".tab").forEach((btn) => {
         btn.addEventListener("click", () => {
-            $(".tab").forEach((b) => b.classList.remove("active"));
+            $$(".tab").forEach((b) => b.classList.remove("active"));
             btn.classList.add("active");
             const key = btn.dataset.tab;
-            $(".tab-panel").forEach((p) => p.classList.add("hidden"));
+            $$(".tab-panel").forEach((p) => p.classList.add("hidden"));
             byId(`panel-${key}`).classList.remove("hidden");
         });
     });
@@ -765,7 +761,7 @@ function main() {
     };
 
     // 复制按钮
-    $("button[data-copy]").forEach((btn) =>
+    $$("button[data-copy]").forEach((btn) =>
         btn.addEventListener("click", () => copyFrom(btn.dataset.copy))
     );
 

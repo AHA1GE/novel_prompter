@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>小说创作提示词生成器</title>
+    <link rel="stylesheet" href="./index.css" />
+</head>
+
+<body>
+    <header class="app-header">
+        <h1>小说创作提示词生成器</h1>
+        <p class="subtitle">单页 · 动态文本替换 · 生成 4 段中文提示词</p>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Prompt Tabs">
+        <button class="tab active" data-tab="world" aria-selected="true">世界观</button>
+        <button class="tab" data-tab="characters" aria-selected="false">角色清单</button>
+        <button class="tab" data-tab="plot" aria-selected="false">全局剧情</button>
+        <button class="tab" data-tab="chapter1" aria-selected="false">第一章场景</button>
+    </nav>
+
+    <main class="tab-panels">
+        <!-- 世界观 -->
+        <section id="panel-world" class="tab-panel" role="tabpanel" aria-labelledby="tab-world">
+            <form class="form" id="form-world" onsubmit="return false;">
+                <div class="field">
+                    <label for="wv-fantasy">幻想程度</label>
+                    <select id="wv-fantasy">
+                        <option value="历史改写">历史改写</option>
+                        <option value="当代虚构">当代虚构</option>
+                        <option value="科幻">科幻</option>
+                        <option value="魔幻">魔幻</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="wv-time">时间主题</label>
+                    <select id="wv-time">
+                        <option value="史前">史前</option>
+                        <option value="古典时代">古典时代</option>
+                        <option value="中世纪">中世纪</option>
+                        <option value="近代">近代</option>
+                        <option value="当代">当代</option>
+                        <option value="近未来">近未来</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="wv-scale">尺度</label>
+                    <select id="wv-scale">
+                        <option value="城邦/邦国">城邦/邦国</option>
+                        <option value="大陆">大陆</option>
+                        <option value="行星">行星</option>
+                        <option value="宇宙">宇宙</option>
+                        <option value="多重宇宙">多重宇宙</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="wv-ideology">意识形态</label>
+                    <select id="wv-ideology">
+                        <option value="保守主义">保守主义</option>
+                        <option value="自由主义">自由主义</option>
+                        <option value="社群主义">社群主义</option>
+                        <option value="技术官僚">技术官僚</option>
+                        <option value="无政府主义">无政府主义</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button id="wv-generate" class="primary" type="button">生成世界观提示词</button>
+                </div>
+                <div class="output">
+                    <textarea id="wv-output" rows="12" readonly placeholder="这里将生成世界观提示词（Markdown 纯文本）"></textarea>
+                    <button data-copy="wv-output" type="button" class="copy">复制</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 角色清单 -->
+        <section id="panel-characters" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-characters">
+            <form class="form" id="form-characters" onsubmit="return false;">
+                <div class="list-actions">
+                    <button id="char-add" type="button" class="secondary">+ 添加角色</button>
+                </div>
+                <div id="char-list" class="char-list" aria-live="polite"></div>
+                <div class="actions">
+                    <button id="char-generate" class="primary" type="button">生成角色提示词</button>
+                </div>
+                <div class="output">
+                    <textarea id="char-output" rows="16" readonly
+                        placeholder="这里将为每个角色生成 Character Dashboard 提示词（Markdown 纯文本）"></textarea>
+                    <button data-copy="char-output" type="button" class="copy">复制</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 全局剧情 -->
+        <section id="panel-plot" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-plot">
+            <form class="form" id="form-plot" onsubmit="return false;">
+                <div class="field">
+                    <label for="plot-genre">类型（多选）</label>
+                    <select id="plot-genre" multiple size="6"></select>
+                </div>
+                <div class="field">
+                    <label for="plot-tone">基调（多选）</label>
+                    <select id="plot-tone" multiple size="6"></select>
+                </div>
+                <div class="field">
+                    <label for="plot-length">篇幅</label>
+                    <select id="plot-length">
+                        <option value="短篇">短篇（~3k）</option>
+                        <option value="中短篇">中短篇（~7k）</option>
+                        <option value="中篇">中篇（~20k）</option>
+                        <option value="长篇">长篇（50k+）</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="plot-pov">视角</label>
+                    <select id="plot-pov">
+                        <option value="第一人称">第一人称</option>
+                        <option value="第三人称有限">第三人称有限</option>
+                        <option value="第三人称全知">第三人称全知</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button id="plot-generate" class="primary" type="button">生成剧情提示词</button>
+                </div>
+                <div class="output">
+                    <textarea id="plot-output" rows="14" readonly placeholder="这里将生成完整剧情大纲提示词（Markdown 纯文本）"></textarea>
+                    <button data-copy="plot-output" type="button" class="copy">复制</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 第一章场景拆解 -->
+        <section id="panel-chapter1" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-chapter1">
+            <form class="form" id="form-chapter1" onsubmit="return false;">
+                <div class="field">
+                    <label for="c1-length">章节长度</label>
+                    <select id="c1-length">
+                        <option value="短（1000-2000字）">短（1000-2000字）</option>
+                        <option value="中（2000-4000字）">中（2000-4000字）</option>
+                        <option value="长（4000-8000字）">长（4000-8000字）</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="c1-scenes">场景数量</label>
+                    <select id="c1-scenes">
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="7">7</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button id="c1-generate" class="primary" type="button">生成场景提示词</button>
+                </div>
+                <div class="output">
+                    <textarea id="c1-output" rows="12" readonly placeholder="这里将生成第一章场景拆解提示词（Markdown 纯文本）"></textarea>
+                    <button data-copy="c1-output" type="button" class="copy">复制</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <span>纯前端 · 打开本文件即可使用</span>
+    </footer>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>

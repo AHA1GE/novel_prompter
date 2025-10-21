@@ -27,43 +27,67 @@
             <form class="form" id="form-world" onsubmit="return false;">
                 <div class="field">
                     <label for="wv-fantasy">幻想程度</label>
-                    <select id="wv-fantasy">
+                    <select id="wv-fantasy" data-custom-wrapper="wv-fantasy-custom"
+                        data-custom-input="wv-fantasy-custom-input" data-custom-fallback="用户自定义幻想程度">
                         <option value="历史改写">历史改写</option>
                         <option value="当代虚构">当代虚构</option>
                         <option value="科幻">科幻</option>
                         <option value="魔幻">魔幻</option>
+                        <option value="自定义">跟随我的想法</option>
                     </select>
+                </div>
+                <div class="field hidden custom-field" id="wv-fantasy-custom">
+                    <label for="wv-fantasy-custom-input">自定义幻想程度（可选）</label>
+                    <input id="wv-fantasy-custom-input" type="text" placeholder="描述你想要的幻想程度" />
                 </div>
                 <div class="field">
                     <label for="wv-time">时间主题</label>
-                    <select id="wv-time">
+                    <select id="wv-time" data-custom-wrapper="wv-time-custom" data-custom-input="wv-time-custom-input"
+                        data-custom-fallback="用户自定义时间主题">
                         <option value="史前">史前</option>
                         <option value="古典时代">古典时代</option>
                         <option value="中世纪">中世纪</option>
                         <option value="近代">近代</option>
                         <option value="当代">当代</option>
                         <option value="近未来">近未来</option>
+                        <option value="自定义">跟随我的想法</option>
                     </select>
+                </div>
+                <div class="field hidden custom-field" id="wv-time-custom">
+                    <label for="wv-time-custom-input">自定义时间主题（可选）</label>
+                    <input id="wv-time-custom-input" type="text" placeholder="描述你设想的时间背景" />
                 </div>
                 <div class="field">
                     <label for="wv-scale">尺度</label>
-                    <select id="wv-scale">
+                    <select id="wv-scale" data-custom-wrapper="wv-scale-custom"
+                        data-custom-input="wv-scale-custom-input" data-custom-fallback="用户自定义尺度设定">
                         <option value="城邦/邦国">城邦/邦国</option>
                         <option value="大陆">大陆</option>
                         <option value="行星">行星</option>
                         <option value="宇宙">宇宙</option>
                         <option value="多重宇宙">多重宇宙</option>
+                        <option value="自定义">跟随我的想法</option>
                     </select>
+                </div>
+                <div class="field hidden custom-field" id="wv-scale-custom">
+                    <label for="wv-scale-custom-input">自定义尺度（可选）</label>
+                    <input id="wv-scale-custom-input" type="text" placeholder="例如：跨维度双城" />
                 </div>
                 <div class="field">
                     <label for="wv-ideology">意识形态</label>
-                    <select id="wv-ideology">
+                    <select id="wv-ideology" data-custom-wrapper="wv-ideology-custom"
+                        data-custom-input="wv-ideology-custom-input" data-custom-fallback="用户自定义意识形态">
                         <option value="保守主义">保守主义</option>
                         <option value="自由主义">自由主义</option>
                         <option value="社群主义">社群主义</option>
                         <option value="技术官僚">技术官僚</option>
                         <option value="无政府主义">无政府主义</option>
+                        <option value="自定义">跟随我的想法</option>
                     </select>
+                </div>
+                <div class="field hidden custom-field" id="wv-ideology-custom">
+                    <label for="wv-ideology-custom-input">自定义意识形态（可选）</label>
+                    <input id="wv-ideology-custom-input" type="text" placeholder="描述你的意识形态设定" />
                 </div>
                 <div class="actions">
                     <button id="wv-generate" class="primary" type="button">生成世界观提示词</button>

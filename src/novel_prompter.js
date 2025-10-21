@@ -153,6 +153,38 @@ function setupTabs() {
     });
 }
 
+function initWorldCustomControls() {
+    const selects = $$("#panel-world select[data-custom-wrapper]");
+    selects.forEach((sel) => {
+        const wrapId = sel.dataset.customWrapper;
+        const inputId = sel.dataset.customInput;
+        const wrap = wrapId ? byId(wrapId) : null;
+        const input = inputId ? byId(inputId) : null;
+        if (!wrap || !input) return;
+        const sync = () => {
+            const useCustom = sel.value === "自定义";
+            wrap.classList.toggle("hidden", !useCustom);
+            wrap.setAttribute("aria-hidden", useCustom ? "false" : "true");
+            input.disabled = !useCustom;
+        };
+        sync();
+        sel.addEventListener("change", sync);
+    });
+}
+
+function readWorldSelection(selectId) {
+    const sel = byId(selectId);
+    if (!sel) return "";
+    if (sel.value === "自定义") {
+        const inputId = sel.dataset.customInput;
+        const input = inputId ? byId(inputId) : null;
+        const fallback = sel.dataset.customFallback || "用户自定义设定";
+        const text = (input && !input.disabled && input.value.trim()) || "";
+        return text || fallback;
+    }
+    return sel.value;
+}
+
 // 填充多选选项
 function populateMultiSelect(id, options) {
     const sel = byId(id);
@@ -378,11 +410,12 @@ function main() {
     );
 
     // 世界观生成
+    initWorldCustomControls();
     byId("wv-generate").addEventListener("click", () => {
-        const fantasy = byId("wv-fantasy").value;
-        const time = byId("wv-time").value;
-        const scale = byId("wv-scale").value;
-        const ideology = byId("wv-ideology").value;
+        const fantasy = readWorldSelection("wv-fantasy");
+        const time = readWorldSelection("wv-time");
+        const scale = readWorldSelection("wv-scale");
+        const ideology = readWorldSelection("wv-ideology");
         setText("wv-output", tplWorld({ fantasy, time, scale, ideology }));
     });
 
